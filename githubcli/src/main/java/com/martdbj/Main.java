@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -18,12 +18,15 @@ import com.google.gson.JsonParser;
 
 public class Main {
 
-    public static ArrayList<String[]> events = new ArrayList<>();
+    public static List<GitHubEvent> events = new ArrayList<>();
 
     public static void main(String[] args) {
         try {
-            URL URLgithubAPI = new URL("https://api.github.com/users/" + "martdbj" + "/events");
-
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Write your GitHub username: ");
+            String userName = sc.nextLine();
+            sc.close();
+            URL URLgithubAPI = new URL("https://api.github.com/users/" + userName + "/events");
             HttpURLConnection connectionGithubAPI = (HttpsURLConnection) URLgithubAPI.openConnection(); //Creation of the HttpURLConnection
             
             connectionGithubAPI.connect(); //Making the connection effective 
@@ -53,32 +56,26 @@ public class Main {
 
                     String type = event.get("type").getAsString();
                     String repoName = getRepoName(event);
-                    String[] singleEvent = {type, repoName};
-                    events.add(singleEvent);
+
+                    events.add(new GitHubEvent(type, repoName));
                 }
-                
-                ArrayList<String> urlEvent = new ArrayList<>();
-                for (String[] event : events) {
-                    int counter = 0;
-                    for (String name : event) {
-                        if (counter == 0) {
-                            counter++;
-                        } else {
-                            urlEvent.add(name);
-                            counter = 0;
+
+                Set<String> uniqueRepoNames = filterByRepoName();
+                Set<String> uniqueTypes = filteredByType();
+
+                for (String type : uniqueTypes) {
+                    for (String repoName : uniqueRepoNames) {
+                        long pushCount = events.stream()
+                                .filter(object -> object.getType().equals(type))
+                                .filter(object -> object.getRepoName().equals(repoName))
+                                .count();
+                        if (pushCount > 0) {
+                            String timeDilemma = pushCount == 1 ? "time" : "times";
+                            System.out.println(type + " at " + repoName + " " + pushCount + " " + timeDilemma);
                         }
                     }
                 }
-
-                // Collection of unique elements
-                Set<String> urlEventNoDuplicate = new HashSet<>(urlEvent);
-                System.out.println(urlEventNoDuplicate);
-                for (String urlNoDuplicate :urlEventNoDuplicate) {
-                    int frecuencia = Collections.frequency(urlEvent, urlNoDuplicate);
-                    System.out.println("Pushed " + frecuencia + " to " + urlEventNoDuplicate);
-                }  
             }
-
         } catch (IOException | RuntimeException e) {
             System.out.println(e.getMessage());
         }
@@ -90,13 +87,19 @@ public class Main {
         return repoName;
     }
 
-    public static int counterRepo() {
-        int i = 0;
-        i++;
-        return i;
+    public static Set<String> filterByRepoName() {
+        Set<String> filteredList = new HashSet<>();
+        for (GitHubEvent object : events) {
+            filteredList.add(object.getRepoName());
+        }
+        return filteredList;
     }
 
-    // public static String[] getNumberPush() {
-    //     events.get("PushEvent");
-    // }
+    public static Set<String> filteredByType() {
+        Set<String> filteredList = new HashSet<>();
+        for (GitHubEvent object : events) {
+            filteredList.add(object.getType());
+        }
+        return filteredList;
+    }
 }
