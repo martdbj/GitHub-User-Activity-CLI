@@ -22,11 +22,16 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+            if (args.length != 1){
+            System.out.println("Usage: java GitHubActivityCLI <username>");
+            return;
+        }
+
             Scanner sc = new Scanner(System.in);
-            System.out.println("Write your GitHub username: ");
+            System.out.print("Write your GitHub username: ");
             String userName = sc.nextLine();
             sc.close();
-            URL URLgithubAPI = new URL("https://api.github.com/users/" + userName + "/events");
+            URL URLgithubAPI = new URL("https://api.github.com/users/" + args[0] + "/events");
             HttpURLConnection connectionGithubAPI = (HttpsURLConnection) URLgithubAPI.openConnection(); //Creation of the HttpURLConnection
             
             connectionGithubAPI.connect(); //Making the connection effective 
