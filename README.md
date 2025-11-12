@@ -1,5 +1,6 @@
 # GitHub-User-Activity-CLI
 Solution for GitHub User Activity project at Roadmap SH.
+https://roadmap.sh/projects/github-user-activity
 
 ## How to run
 
