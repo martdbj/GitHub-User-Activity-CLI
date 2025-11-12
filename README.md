@@ -1,2 +1,17 @@
 # GitHub-User-Activity-CLI
-<h1>Github-User-ActivityCLI</h1>
+Solution for GitHub User Activity project at Roadmap SH.
+
+## How to run
+
+Clone the repository and run:
+
+```bash
+git clone https://github.com/martdbj/GitHub-User-Activity-CLI.git
+cd .\GitHub-User-Activity-CLI\githubcli\
+```
+
+Run this command to list all the public events of a user:
+
+```bash
+./mvnw.cmd exec:java "-Dexec.args='<username>'"
+```
