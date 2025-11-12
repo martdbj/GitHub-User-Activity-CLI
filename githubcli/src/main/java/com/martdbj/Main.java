@@ -27,10 +27,6 @@ public class Main {
             return;
         }
 
-            Scanner sc = new Scanner(System.in);
-            System.out.print("Write your GitHub username: ");
-            String userName = sc.nextLine();
-            sc.close();
             URL URLgithubAPI = new URL("https://api.github.com/users/" + args[0] + "/events");
             HttpURLConnection connectionGithubAPI = (HttpsURLConnection) URLgithubAPI.openConnection(); //Creation of the HttpURLConnection
             
