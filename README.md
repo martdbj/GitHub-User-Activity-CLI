@@ -10,7 +10,7 @@ git clone https://github.com/martdbj/GitHub-User-Activity-CLI.git
 cd .\GitHub-User-Activity-CLI\githubcli\
 ```
 
-Run this command to list all the public events of a user:
+Run this command to list all the public GitHub events of a user:
 
 ```bash
 ./mvnw.cmd exec:java "-Dexec.args='<username>'"
